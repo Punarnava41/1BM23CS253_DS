@@ -1,0 +1,3 @@
+def majorityElement(nums):
+candid = None
+count = 0
