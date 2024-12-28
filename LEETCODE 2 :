@@ -1,3 +1,17 @@
 def majorityElement(nums):
-candid = None
-count = 0
+    candid = None
+    count = 0
+
+    for num in nums:
+        if count == 0:
+            candid = num
+        if num == candid:
+            count += 1
+        else:
+            count -= 1
+
+    if nums.count(candid) > len(nums) // 2:
+        return candid
+    else:
+        return None
+
