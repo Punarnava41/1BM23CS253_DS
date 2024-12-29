@@ -1,3 +1,5 @@
+// INSERTION :
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -131,3 +133,200 @@ int main() {
     }
     return 0;
 }
+
+// OUTPUT :
+Singly Linked List Operations:
+1. Create Linked List
+2. Insert at Beginning
+3. Insert at Position
+4. Insert at End
+5. Display List
+6. Exit
+Enter your choice: 1
+Linked list created.
+
+Enter your choice: 2
+Enter value to insert: 10
+Inserted 10 at the beginning.
+
+Enter your choice: 2
+Enter value to insert: 20
+Inserted 20 at the beginning.
+
+Enter your choice: 4
+Enter value to insert: 30
+Inserted 30 at the end.
+
+Enter your choice: 3
+Enter value to insert: 15
+Enter position: 2
+Inserted 15 at position 2.
+
+Enter your choice: 5
+Linked list contents: 20 -> 15 -> 10 -> 30 -> NULL
+
+Enter your choice: 6
+
+// DELETION:
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* head = NULL;
+
+void createLinkedList() {
+    head = NULL;
+    printf("Linked list created.\n");
+}
+
+void deleteFromBeginning() {
+    if (head == NULL) {
+        printf("Linked list is empty. Cannot delete.\n");
+        return;
+    }
+
+    struct Node* temp = head;
+    head = head->next;
+    printf("Deleted %d from the beginning.\n", temp->data);
+    free(temp);
+}
+
+void deleteFromEnd() {
+    if (head == NULL) {
+        printf("Linked list is empty. Cannot delete.\n");
+        return;
+    }
+
+    if (head->next == NULL) {
+        printf("Deleted %d from the end.\n", head->data);
+        free(head);
+        head = NULL;
+        return;
+    }
+
+    struct Node* temp = head;
+    while (temp->next->next != NULL) {
+        temp = temp->next;
+    }
+
+    printf("Deleted %d from the end.\n", temp->next->data);
+    free(temp->next);
+    temp->next = NULL;
+}
+
+void deleteSpecificElement(int value) {
+    if (head == NULL) {
+        printf("Linked list is empty. Cannot delete.\n");
+        return;
+    }
+
+    if (head->data == value) {
+        struct Node* temp = head;
+        head = head->next;
+        printf("Deleted %d from the list.\n", temp->data);
+        free(temp);
+        return;
+    }
+
+    struct Node* temp = head;
+    while (temp->next != NULL && temp->next->data != value) {
+        temp = temp->next;
+    }
+
+    if (temp->next == NULL) {
+        printf("Element %d not found in the list.\n", value);
+        return;
+    }
+
+    struct Node* toDelete = temp->next;
+    temp->next = toDelete->next;
+    printf("Deleted %d from the list.\n", toDelete->data);
+    free(toDelete);
+}
+
+void displayList() {
+    if (head == NULL) {
+        printf("Linked list is empty.\n");
+        return;
+    }
+
+    struct Node* temp = head;
+    printf("Linked list contents: ");
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    int choice, value;
+
+    while (1) {
+        printf("\nSingly Linked List Operations:\n");
+        printf("1. Create Linked List\n");
+        printf("2. Delete from Beginning\n");
+        printf("3. Delete Specific Element\n");
+        printf("4. Delete from End\n");
+        printf("5. Display List\n");
+        printf("6. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                createLinkedList();
+                break;
+            case 2:
+                deleteFromBeginning();
+                break;
+            case 3:
+                printf("Enter value to delete: ");
+                scanf("%d", &value);
+                deleteSpecificElement(value);
+                break;
+            case 4:
+                deleteFromEnd();
+                break;
+            case 5:
+                displayList();
+                break;
+            case 6:
+                exit(0);
+            default:
+                printf("Invalid choice! Try again.\n");
+        }
+    }
+    return 0;
+}
+
+// OUTPUT :
+Singly Linked List Operations:
+1. Create Linked List
+2. Delete from Beginning
+3. Delete Specific Element
+4. Delete from End
+5. Display List
+6. Exit
+Enter your choice: 1
+Linked list created.
+
+Enter your choice: 2
+Linked list is empty. Cannot delete.
+
+Enter your choice: 5
+Linked list is empty.
+
+Enter your choice: 3
+Enter value to delete: 10
+Linked list is empty. Cannot delete.
+
+Enter your choice: 1
+Linked list created.
+
+Enter your choice: 5
+Linked list contents: Empty
