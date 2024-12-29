@@ -3,153 +3,87 @@
 
 struct Node {
     int data;
-    struct Node *left, *right;
+    struct Node* left;
+    struct Node* right;
 };
 
-struct Node* newNode(int data) {
-    struct Node* node = (struct Node*)malloc(sizeof(struct Node));
-    node->data = data;
-    node->left = node->right = NULL;
-    return node;
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
 }
 
 struct Node* insert(struct Node* root, int data) {
-    if (root == NULL) 
-        return newNode(data);
-    if (data < root->data)
+    if (root == NULL) {
+        return createNode(data);
+    }
+    if (data < root->data) {
         root->left = insert(root->left, data);
-    else if (data > root->data)
+    } else if (data > root->data) {
         root->right = insert(root->right, data);
+    }
     return root;
 }
 
-void inorder(struct Node* root) {
+void inOrderTraversal(struct Node* root) {
     if (root != NULL) {
-        inorder(root->left);
+        inOrderTraversal(root->left);
         printf("%d ", root->data);
-        inorder(root->right);
+        inOrderTraversal(root->right);
     }
 }
 
-void preorder(struct Node* root) {
+void preOrderTraversal(struct Node* root) {
     if (root != NULL) {
         printf("%d ", root->data);
-        preorder(root->left);
-        preorder(root->right);
+        preOrderTraversal(root->left);
+        preOrderTraversal(root->right);
     }
 }
 
-void postorder(struct Node* root) {
+void postOrderTraversal(struct Node* root) {
     if (root != NULL) {
-        postorder(root->left);
-        postorder(root->right);
+        postOrderTraversal(root->left);
+        postOrderTraversal(root->right);
         printf("%d ", root->data);
     }
+}
+
+void displayTree(struct Node* root) {
+    printf("In-order Traversal: ");
+    inOrderTraversal(root);
+    printf("\n");
+
+    printf("Pre-order Traversal: ");
+    preOrderTraversal(root);
+    printf("\n");
+
+    printf("Post-order Traversal: ");
+    postOrderTraversal(root);
+    printf("\n");
 }
 
 int main() {
     struct Node* root = NULL;
-    int choice, data;
-    
-    printf("Binary Search Tree\n");
-    while (1) {
-        printf("\n1. Insert\n2. In-order Traversal\n3. Pre-order Traversal\n4. Post-order Traversal\n5. Exit\n");
-        printf("Enter your choice: ");
-        scanf("%d", &choice);
-        
-        switch (choice) {
-            case 1:
-                printf("Enter the value to insert: ");
-                scanf("%d", &data);
-                root = insert(root, data);
-                break;
-            case 2:
-                printf("In-order Traversal: ");
-                inorder(root);
-                printf("\n");
-                break;
-            case 3:
-                printf("Pre-order Traversal: ");
-                preorder(root);
-                printf("\n");
-                break;
-            case 4:
-                printf("Post-order Traversal: ");
-                postorder(root);
-                printf("\n");
-                break;
-            case 5:
-                exit(0);
-            default:
-                printf("Invalid choice!\n");
-        }
-    }
+
+    root = insert(root, 50);
+    root = insert(root, 30);
+    root = insert(root, 20);
+    root = insert(root, 40);
+    root = insert(root, 70);
+    root = insert(root, 60);
+    root = insert(root, 80);
+
+    printf("Binary Search Tree Traversals:\n");
+    displayTree(root);
+
     return 0;
 }
 
 OUTPUT:
-Binary Search Tree
-
-1. Insert
-2. In-order Traversal
-3. Pre-order Traversal
-4. Post-order Traversal
-5. Exit
-Enter your choice: 1
-Enter the value to insert: 2
-
-1. Insert
-2. In-order Traversal
-3. Pre-order Traversal
-4. Post-order Traversal
-5. Exit
-Enter your choice: 1
-Enter the value to insert: 3
-
-1. Insert
-2. In-order Traversal
-3. Pre-order Traversal
-4. Post-order Traversal
-5. Exit
-Enter your choice: 1
-Enter the value to insert: 4
-
-1. Insert
-2. In-order Traversal
-3. Pre-order Traversal
-4. Post-order Traversal
-5. Exit
-Enter your choice: 1
-Enter the value to insert: 8
-
-1. Insert
-2. In-order Traversal
-3. Pre-order Traversal
-4. Post-order Traversal
-5. Exit
-Enter your choice: 1
-Enter the value to insert: 9
-
-1. Insert
-2. In-order Traversal
-3. Pre-order Traversal
-4. Post-order Traversal
-5. Exit
-Enter your choice: 2
-In-order Traversal: 8 3 9 2 4
-
-1. Insert
-2. In-order Traversal
-3. Pre-order Traversal
-4. Post-order Traversal
-5. Exit
-Enter your choice: 3
-Pre-order Traversal: 2 3 4 8 9 
-
-1. Insert
-2. In-order Traversal
-3. Pre-order Traversal
-4. Post-order Traversal
-5. Exit
-Enter your choice: 4
-Post-order Traversal: 9 8 4 3 2 
+Binary Search Tree Traversals:
+In-order Traversal: 20 30 40 50 60 70 80 
+Pre-order Traversal: 50 30 20 40 70 60 80 
+Post-order Traversal: 20 40 30 60 80 70 50
