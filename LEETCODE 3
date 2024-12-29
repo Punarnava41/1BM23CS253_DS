@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+struct ListNode {
+    int val;
+    struct ListNode *next;
+};
+
+bool isPalindrome(struct ListNode *head) {
+    if (head == NULL || head->next == NULL) 
+        return true;
+
+    struct ListNode *temp = head;
+    struct ListNode *stack = NULL;
+
+    while (temp != NULL) {
+        struct ListNode *newnode = (struct ListNode *)malloc(sizeof(struct ListNode));
+        newnode->val = temp->val;
+        newnode->next = stack;
+        stack = newnode;
+        temp = temp->next;
+    }
+
+    temp = head;
+    while (temp != NULL) {
+        if (temp->val != stack->val) {
+            while (stack != NULL) {
+                struct ListNode *tempNode = stack;
+                stack = stack->next;
+                free(tempNode);
+            }
+            return false;
+        }
+        struct ListNode *tempNode = stack;
+        stack = stack->next;
+        free(tempNode);
+        temp = temp->next;
+    }
+
+    return true;
+}
