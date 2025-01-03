@@ -1,130 +1,114 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define TABLE_SIZE 10 
-#define EMPTY -1 
+#define TABLE_SIZE 5 
 
-struct HashMap {
-    int key;
-    int value;
-};
+typedef struct {
+    int key;   
+    int value; 
+} EmployeeRecord;
 
-void initTable(struct HashMap table[]) {
+
+EmployeeRecord hashTable[TABLE_SIZE];
+
+void initializeTable() {
     for (int i = 0; i < TABLE_SIZE; i++) {
-        table[i].key = EMPTY;
-        table[i].value = 0;
+        hashTable[i].key = -1; 
+        hashTable[i].value = -1;
     }
 }
 
-int hash(int key) {
+
+int hashFunction(int key) {
     return key % TABLE_SIZE;
 }
 
-void insert(struct HashMap table[], int key, int value) {
-    int index = hash(key);
-    int originalIndex = index;
 
-    while (table[index].key != EMPTY) {
-        index = (index + 1) % TABLE_SIZE;
-        if (index == originalIndex) {  
-            printf("Hash table is full. Cannot insert key %d.\n", key);
+void insert(int key, int value) {
+    int hashIndex = hashFunction(key);
+    int originalIndex = hashIndex;
+
+  
+    while (hashTable[hashIndex].key != -1) {
+        printf("Collision at index %d. Trying next index...\n", hashIndex);
+        hashIndex = (hashIndex + 1) % TABLE_SIZE;
+
+        if (hashIndex == originalIndex) {
+            printf("Error: Hash table is full. Cannot insert key %d\n", key);
             return;
         }
     }
 
-    table[index].key = key;
-    table[index].value = value;
-    printf("Inserted (key: %d, value: %d) at index %d\n", key, value, index);
+   
+    hashTable[hashIndex].key = key;
+    hashTable[hashIndex].value = value;
+    printf("Inserted key %d at index %d\n", key, hashIndex);
 }
 
-void search(struct HashMap table[], int key) {
-    int index = hash(key);
-    int originalIndex = index;
 
-    while (table[index].key != EMPTY) {
-        if (table[index].key == key) {
-            printf("Key %d found with value %d at index %d\n", key, table[index].value, index);
-            return;
-        }
-        index = (index + 1) % TABLE_SIZE;
-        if (index == originalIndex) {
-            break;
-        }
-    }
-    printf("Key %d not found in the table.\n", key);
-}
-
-void display(struct HashMap table[]) {
+void displayTable() {
     printf("\nHash Table:\n");
+    printf("Index\tKey\tValue\n");
     for (int i = 0; i < TABLE_SIZE; i++) {
-        if (table[i].key != EMPTY)
-            printf("Index %d -> Key: %d, Value: %d\n", i, table[i].key, table[i].value);
+        if (hashTable[i].key != -1)
+            printf("%d\t%d\t%d\n", i, hashTable[i].key, hashTable[i].value);
         else
-            printf("Index %d -> Empty\n", i);
+            printf("%d\t--\t--\n", i);
     }
-    printf("\n");
 }
 
 int main() {
-    struct HashMap table[TABLE_SIZE];
-    int choice, key, value;
+    int n, key, value;
 
-    initTable(table);
+ 
+    initializeTable();
 
-    while (1) {
-        printf("1. Insert\n2. Search\n3. Display\n4. Exit\n");
-        printf("Enter your choice: ");
-        scanf("%d", &choice);
+    printf("Enter the number of employee records: ");
+    scanf("%d", &n);
 
-        switch (choice) {
-            case 1:
-                printf("Enter key and value to insert: ");
-                scanf("%d %d", &key, &value);
-                insert(table, key, value);
-                break;
-            case 2:
-                printf("Enter key to search: ");
-                scanf("%d", &key);
-                search(table, key);
-                break;
-            case 3:
-                display(table);
-                break;
-            case 4:
-                printf("Exiting...\n");
-                return 0;
-            default:
-                printf("Invalid choice. Try again.\n");
+  
+    for (int i = 0; i < n; i++) {
+        printf("Enter key (4-digit) and value for employee %d: ", i + 1);
+        scanf("%d %d", &key, &value);
+
+        
+        if (key < 1000 || key > 9999) {
+            printf("Invalid key. Please enter a 4-digit key.\n");
+            i--; 
+        } else {
+            insert(key, value);
         }
     }
 
+ 
+    displayTable();
+
     return 0;
 }
-OUTPUT:
+output:
 
-Enter choice: 1
-Enter key and value to insert: 15 100
-Inserted (key: 15, value: 100) at index 5
+Enter the number of employee records: 5
+Enter key (4-digit) and value for employee 1: 1234 100
+Inserted key 1234 at index 4
+Enter key (4-digit) and value for employee 2: 5678 200
+Inserted key 5678 at index 8
+Enter key (4-digit) and value for employee 3: 9012 300
+Inserted key 9012 at index 2
+Enter key (4-digit) and value for employee 4: 3456 400
+Inserted key 3456 at index 6
+Enter key (4-digit) and value for employee 5: 1234 500
+Collision at index 4. Trying next index...
+Inserted key 1234 at index 5
 
-Enter choice: 1
-Enter key and value to insert: 25 200
-Inserted (key: 25, value: 200) at index 6
-
-Enter choice: 3
 Hash Table:
-Index 0 -> Empty
-Index 1 -> Empty
-Index 5 -> Key: 15, Value: 100
-Index 6 -> Key: 25, Value: 200
-
-
-Enter choice: 2
-Enter key to search: 15
-Key 15 found with value 100 at index 5
-
-Enter choice: 2
-Enter key to search: 99
-Key 99 not found in the table.
-
-Enter choice: 4
-Exiting...
+Index   Key     Value
+0       --      --
+1       --      --
+2       9012    300
+3       --      --
+4       1234    100
+5       1234    500
+6       3456    400
+7       --      --
+8       5678    200
+9       --      --
